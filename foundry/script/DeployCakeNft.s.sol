@@ -8,6 +8,7 @@ contract DeployCakeNft is Script {
     function deployCake() public returns (CakeNft) {
         vm.startBroadcast();
         CakeNft cake = new CakeNft();
+        cake.bakeCake();
         vm.stopBroadcast();
         return cake;
     }

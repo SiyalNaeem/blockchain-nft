@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
+import {ERC721} from "@openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
+import {Base64} from "@openzeppelin-contracts/contracts/utils/Base64.sol";
 
 contract CakeNft is ERC721, Ownable {
     error ERC721Metadata__URI_QueryFor_NonExistentToken();
@@ -46,7 +46,8 @@ contract CakeNft is ERC721, Ownable {
     string constant TOP_CAKE_LAYER_NO_COLOR_PART_TWO = '" stroke-width="1"/>';
 
     // Frosting top:
-    string constant FROSTING_TOP_NO_COLOR_PART_ONE = '<ellipse cx="150" cy="120" rx="65" ry="10" fill="';
+    string constant FROSTING_TOP_NO_COLOR_PART_ONE =
+        '<ellipse cx="150" cy="120" rx="65" ry="10" fill="';
     string constant FROSTING_TOP_NO_COLOR_PART_TWO = '" stroke-width="0.5"/>';
 
     // Candle:
@@ -59,8 +60,10 @@ contract CakeNft is ERC721, Ownable {
 
     // Simple decoration (all will be the same color)
     string constant DECORATION_CIRCLE_NO_COLOR_PART_ONE = '<circle cx="115" cy="145" r="5" fill="';
-    string constant DECORATION_CIRCLE_NO_COLOR_PART_TWO = '"/><circle cx="150" cy="145" r="5" fill="';
-    string constant DECORATION_CIRCLE_NO_COLOR_PART_THREE = '"/><circle cx="185" cy="145" r="5" fill="';
+    string constant DECORATION_CIRCLE_NO_COLOR_PART_TWO =
+        '"/><circle cx="150" cy="145" r="5" fill="';
+    string constant DECORATION_CIRCLE_NO_COLOR_PART_THREE =
+        '"/><circle cx="185" cy="145" r="5" fill="';
     string constant DECORATION_CIRCLE_NO_COLOR_PART_FOUR = '"/>';
 
     // Simple icing swirls:
@@ -83,7 +86,9 @@ contract CakeNft is ERC721, Ownable {
         uint256 tokenCounter = s_tokenCounter;
 
         // Insecure randomness!!
-        uint256 cakeSeed = uint256(keccak256(abi.encodePacked(msg.sender, tokenCounter, block.number, block.timestamp)));
+        uint256 cakeSeed = uint256(
+            keccak256(abi.encodePacked(msg.sender, tokenCounter, block.number, block.timestamp))
+        );
         string memory cakeSvg = createSvgCakeFromSeed(cakeSeed);
         string memory imageUri = svgToImageURI(cakeSvg);
 
@@ -112,23 +117,24 @@ contract CakeNft is ERC721, Ownable {
 
         string memory imageURI = s_tokenIdToImageUri[tokenId];
 
-        return string(
-            abi.encodePacked(
-                _baseURI(),
-                Base64.encode(
-                    bytes( // bytes casting actually unnecessary as 'abi.encodePacked()' returns a bytes
-                        abi.encodePacked(
-                            '{"name":"',
-                            name(), // You can add whatever name here
-                            '", "description":"A delicious pseudo-random cake!", ',
-                            '"attributes": [{"trait_type": "yummy", "value": 100}], "image":"',
-                            imageURI,
-                            '"}'
+        return
+            string(
+                abi.encodePacked(
+                    _baseURI(),
+                    Base64.encode(
+                        bytes( // bytes casting actually unnecessary as 'abi.encodePacked()' returns a bytes
+                            abi.encodePacked(
+                                '{"name":"',
+                                name(), // You can add whatever name here
+                                '", "description":"A delicious pseudo-random cake!", ',
+                                '"attributes": [{"trait_type": "yummy", "value": 100}], "image":"',
+                                imageURI,
+                                '"}'
+                            )
                         )
                     )
                 )
-            )
-        );
+            );
     }
 
     function generateColorFromSeed(uint256 seed) public pure returns (string memory) {
@@ -150,12 +156,24 @@ contract CakeNft is ERC721, Ownable {
         CakeColors memory cakeColors;
 
         cakeColors.plateColor = generateColorFromSeed(cakeSeed);
-        cakeColors.bottomColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(1)))));
-        cakeColors.topColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(2)))));
-        cakeColors.frostingColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(3)))));
-        cakeColors.candleColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(4)))));
-        cakeColors.decorationsColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(5)))));
-        cakeColors.icingSwirlsColor = generateColorFromSeed(uint256(keccak256(abi.encodePacked(cakeSeed, uint256(6)))));
+        cakeColors.bottomColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(1))))
+        );
+        cakeColors.topColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(2))))
+        );
+        cakeColors.frostingColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(3))))
+        );
+        cakeColors.candleColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(4))))
+        );
+        cakeColors.decorationsColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(5))))
+        );
+        cakeColors.icingSwirlsColor = generateColorFromSeed(
+            uint256(keccak256(abi.encodePacked(cakeSeed, uint256(6))))
+        );
 
         finalCake = string.concat(
             finalCake,
