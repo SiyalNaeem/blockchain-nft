@@ -42,16 +42,6 @@ export default function BuyNftPage() {
         args: [contractAddress as `0x${string}`, BigInt(tokenId)],
     })
 
-    // Get the listing details
-    const result = useReadContract({
-        abi: marketplaceAbi,
-        address: marketplaceAddress,
-        functionName: "getListing",
-        args: [contractAddress as `0x${string}`, BigInt(tokenId)],
-    })
-
-    console.log("Listing result:", result)
-
     // Destructure listing data if available
     const listing = listingData as Listing | undefined
     const price = listing ? listing.price.toString() : "0"
